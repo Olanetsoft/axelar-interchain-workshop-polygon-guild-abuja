@@ -21,9 +21,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.9",
   networks: {
-    bsc: {
-      url: "https://data-seed-prebsc-1-s1.binance.org:8545",
-      chainId: 97,
+    polygonMumbai: {
+      url: "https://rpc.ankr.com/polygon_mumbai",
+      chainId: 80001,
       accounts: [PRIVATE_KEY],
     },
     avalancheFujiTestnet: {

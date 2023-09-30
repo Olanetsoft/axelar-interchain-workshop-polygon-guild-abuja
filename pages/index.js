@@ -3,16 +3,21 @@ import Switch from "react-switch";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   useContractWrite,
-  usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
 import { ethers } from "ethers";
+import {
+  AxelarQueryAPI,
+  Environment,
+  EvmChain,
+  GasToken,
+} from "@axelar-network/axelarjs-sdk";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import SendMessageContract from "../hardhat/artifacts/contracts/SendMessage.sol/SendMessage.json";
 
-const BSC_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_BSC_CONTRACT_ADDRESS;
+const POLYGON_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_POLYGON_CONTRACT_ADDRESS;
 const AVALANCHE_CONTRACT_ADDRESS =
   process.env.NEXT_PUBLIC_AVALANCHE_CONTRACT_ADDRESS;
 const AVALANCHE_RPC_URL = process.env.NEXT_PUBLIC_AVALANCHE_RPC_URL;
@@ -25,16 +30,29 @@ export default function Home() {
 
   const [value, setValue] = useState(""); // State variable to hold the value
 
-  const { config } = usePrepareContractWrite({
-    // Calling a hook to prepare the contract write configuration
-    address: BSC_CONTRACT_ADDRESS, // Address of the BSC contract
+  const api = new AxelarQueryAPI({ environment: Environment.TESTNET });
+  const [gasFee, setGasFee] = useState(0);
+
+  // Estimate Gas
+  const gasEstimator = async () => {
+    const gas = await api.estimateGasFee(
+      EvmChain.POLYGON,
+      EvmChain.AVALANCHE,
+      GasToken.MATIC,
+      700000,
+      2
+    );
+    setGasFee(gas);
+  };
+
+
+  const { data: useContractWriteData, write, isError } = useContractWrite({
+    address: POLYGON_CONTRACT_ADDRESS, // Address of the Polygon Mumbai contract
     abi: SendMessageContract.abi, // ABI (Application Binary Interface) of the contract
     functionName: "sendMessage", // Name of the function to call on the contract
     args: ["Avalanche", AVALANCHE_CONTRACT_ADDRESS, message], // Arguments to pass to the contract function
-    value: ethers.utils.parseEther("0.01"), // Value to send along with the contract call
+    value: gasFee, // Amount of MATIC to send with the transaction
   });
-
-  const { data: useContractWriteData, write } = useContractWrite(config); // Calling a hook to get contract write data and the write function
 
   const { data: useWaitForTransactionData, isSuccess } = useWaitForTransaction({
     // Calling a hook to wait for the transaction to be mined
@@ -45,7 +63,6 @@ export default function Home() {
     write(); // Initiating the contract call
 
     toast.info("Sending message...", {
-      // Displaying a toast notification
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -81,6 +98,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    gasEstimator();
     readDestinationChainVariables();
     const body = document.querySelector("body");
     darkMode ? body.classList.add("dark") : body.classList.remove("dark");
@@ -145,8 +163,9 @@ export default function Home() {
 
       <main className="flex-grow flex flex-col items-center justify-center">
         <h1 className="text-4xl font-bold mb-8 text-center">
-          Fullstack Interchain dApp with{" "}
-          <span className="text-blue-500">Axelar 🔥 </span>
+          Fullstack Interchain dApp on <span className="text-purple-500">Polygon
+            </span> with{" "}
+          <span className="text-blue-500">Axelar </span>
         </h1>
         <p className=" mb-8 text-center max-w-3xl text-gray-500">
           An interchain decentralized application using React, Solidity, and
@@ -202,7 +221,7 @@ export default function Home() {
       <ToastContainer />
       <footer className="flex justify-center items-center py-8 border-t border-gray-300">
         <a
-          href="https://github.com/Olanetsoft/fullstack-interchain-dapp"
+          href="https://github.com/Olanetsoft/axelar-interchain-workshop-polygon-guild-abuja"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center font-bold text-blue-500 text-lg"

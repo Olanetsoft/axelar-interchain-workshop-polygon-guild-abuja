@@ -9,7 +9,7 @@ const hre = require("hardhat");
 async function main() {
   const SendMessage = await hre.ethers.getContractFactory("SendMessage");
   const sendMessage = await SendMessage.deploy(
-    "0x4D147dCb984e6affEEC47e44293DA442580A3Ec0",
+    "0xBF62ef1486468a6bd26Dd669C06db43dEd5B849B",
     "0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6"
   );
 

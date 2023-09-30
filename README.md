@@ -1,10 +1,10 @@
-# **Fullstack Interchain dApp**
+# **Fullstack Interchain dApp Workshop: Polygon Guild Abuja**
 
 This project is a full-stack decentralized application (dApp) built with React/Nextjs, Solidity, and Axelar General Message Passing. It enables users to send messages between two blockchain chains.
 
 ## **Table of Contents**
 
-- [**Features**](https://github.com/Olanetsoft/fullstack-interchain-dapp#features)
+- [**Features**](https://github.com/Olanetsoft/axelar-interchain-workshop-polygon-guild-abuja#features)
 - [**Installation**](#installation)
 - [**Usage**](#usage)
 - [**Technologies Used**](#technologies-used)
@@ -25,13 +25,13 @@ To install and run this application locally, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Olanetsoft/fullstack-interchain-dapp.git
+   git clone https://github.com/Olanetsoft/axelar-interchain-workshop-polygon-guild-abuja.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd fullstack-interchain-dapp
+   cd axelar-interchain-workshop-polygon-guild-abuja
    ```
 
 3. Install the dependencies:
@@ -58,23 +58,28 @@ To install and run this application locally, follow these steps:
 6. Compile and Deploy the smart contracts:
 
    ```bash
+   npm install
+   ```
+   then
+   
+   ```bash
    npx hardhat run scripts/deploy.js --network <network>
    ```
 
-   Replace `<network>` with the desired network (e.g. `bsc` and `avalancheFujiTestnet` in this case). Copy the contract address once the deployment is complete.
+   Replace `<network>` with the desired network (e.g. `polygonMumbai` and `avalancheFujiTestnet` in this case). Copy the contract address once the deployment is complete.
    
-   > Ensure you update the Axelar gateway and gas service address for Binance and Avalanche respectively in `deploy.js` file under the `scripts` directory and deploy them seperately. You  can find the gateway and gas service address [here](https://docs.axelar.dev/resources/testnet).
+   > Ensure you update the Axelar gateway and gas service address for Polygon and Avalanche respectively in `deploy.js` file under the `scripts` directory and deploy them seperately. You  can find the gateway and gas service address [here](https://docs.axelar.dev/resources/testnet).
 
 7. Set up the environment variables:
 
    - Create a `.env.local` file in the root directory.
    - Define the following variables in the `.env.local` file:
      ```apache
-     NEXT_PUBLIC_BSC_CONTRACT_ADDRESS=<BSC contract address>
+     NEXT_PUBLIC_POLYGON_CONTRACT_ADDRESS=<Polygon mumbai contract address>
      NEXT_PUBLIC_AVALANCHE_CONTRACT_ADDRESS=<Avalanche contract address>
      NEXT_PUBLIC_AVALANCHE_RPC_URL=https://avalanche-fuji-c-chain.publicnode.com
      ```
-     Replace `<BSC contract address>` and `<Avalanche contract address>`, with the respective values.
+     Replace `<Polygon mumbai contract address>` and `<Avalanche contract address>`, with the respective values.
 
 8. Start the development server:
 
